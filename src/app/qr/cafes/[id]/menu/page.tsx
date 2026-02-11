@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase } from "@/lib/supabase/client"; // 👈 browser client
+import { supabase } from "@/lib/supabase/client";
 import MenuCard from "@/app/components/MenuCard";
 import type { MenuItem, CartItem } from "@/types/menu";
 
@@ -10,8 +10,7 @@ export default function QRMenuPage() {
   const router = useRouter();
   const params = useParams();
 
-  const cafeId =
-    typeof params?.id === "string" ? params.id : undefined;
+  const cafeId = typeof params?.id === "string" ? params.id : undefined;
 
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,21 +38,11 @@ export default function QRMenuPage() {
           .order("category", { ascending: true })
           .order("price", { ascending: true });
 
-        console.log("DATA:", data);
-        console.log("ERROR:", error);
-
         if (error) throw error;
-
-        if (!cancelled) {
-          setMenu(data || []);
-        }
+        if (!cancelled) setMenu(data || []);
       } catch (err) {
         if (!cancelled) {
-          setError(
-            err instanceof Error
-              ? err.message
-              : "Error loading menu"
-          );
+          setError(err instanceof Error ? err.message : "Error loading menu");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -61,7 +50,6 @@ export default function QRMenuPage() {
     };
 
     fetchMenu();
-
     return () => {
       cancelled = true;
     };
@@ -93,81 +81,81 @@ export default function QRMenuPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Cafe Menu
-      </h1>
+    <main className="min-h-screen bg-linear-to-b from-white to-gray-50">
+      <section className="max-w-6xl mx-auto px-6 py-12">
+        {/* Header */}
+        <h1 className="text-4xl font-bold tracking-tight mb-4 animate-fade-in">
+          Café Menu
+        </h1>
 
-      {loading && <p>Loading menu…</p>}
 
-      {error && <p className="text-red-500">{error}</p>}
+        {/* Loading / Error */}
+        {loading && <p className="text-gray-500">Loading menu…</p>}
+        {error && <p className="px-4 py-2 rounded-lg bg-linear-to-r from-amber-600 to-amber-800 text-white hover:opacity-90 transition">{error}</p>}
 
-      {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {menu.map((item) => (
-            <MenuCard
-              key={item.id}
-              item={item}
-              isOrderEnabled
-              onAddToCart={handleAddToCart}
-            />
-          ))}
-        </div>
-      )}
+        {/* Menu Grid */}
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {menu.map((item) => (
+              <MenuCard
+                key={item.id}
+                item={item}
+                isOrderEnabled
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        )}
 
-      {/* Customization Modal */}
-      {selectedItem && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">
-              Customize {selectedItem.name}
-            </h2>
+        {/* Customization Modal */}
+        {selectedItem && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-lg">
+              <h2 className="text-xl font-semibold mb-4">
+                Customize {selectedItem.name}
+              </h2>
 
-            <label className="block mb-2 font-medium">
-              Sugar Level
-            </label>
-
-            <select
-              className="w-full border rounded-lg p-2 mb-4"
-              value={sugarLevel}
-              onChange={(e) =>
-                setSugarLevel(e.target.value)
-              }
-            >
-              <option value="0%">0%</option>
-              <option value="25%">25%</option>
-              <option value="50%">50%</option>
-              <option value="75%">75%</option>
-              <option value="100%">100%</option>
-            </select>
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="px-4 py-2 rounded-lg border"
+              <label className="block mb-2 font-medium">Sugar Level</label>
+              <select
+                className="w-full border rounded-lg p-2 mb-4"
+                value={sugarLevel}
+                onChange={(e) => setSugarLevel(e.target.value)}
               >
-                Cancel
-              </button>
-              <button
-                onClick={confirmAddToCart}
-                className="px-4 py-2 rounded-lg bg-amber-700 text-white"
-              >
-                Add to Cart
-              </button>
+                <option value="0%">0%</option>
+                <option value="25%">25%</option>
+                <option value="50%">50%</option>
+                <option value="75%">75%</option>
+                <option value="100%">100%</option>
+              </select>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setSelectedItem(null)}
+                  className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmAddToCart}
+                  className="px-4 py-2 rounded-lg bg-linear-to-r from-amber-600 to-amber-800 text-white hover:opacity-90 transition"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Proceed to Payment */}
-      {cart.length > 0 && (
-        <button
-          onClick={goToPayment}
-          className="fixed bottom-6 right-6 bg-amber-700 text-white px-6 py-3 rounded-full shadow-lg"
-        >
-          Proceed to Payment ({cart.length})
-        </button>
-      )}
-    </div>
+        {/* Proceed to Payment */}
+        {cart.length > 0 && (
+          <button
+            onClick={goToPayment}
+            className="fixed bottom-6 right-6 bg-linear-to-r from-amber-600 to-amber-800 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90 transition"
+          >
+            Proceed to Payment ({cart.length})
+          </button>
+        )}
+      </section>
+    </main>
   );
 }
