@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import type { MenuItem } from "@/types/menu";
+import Link from "next/link";
+
 
 export default function OwnerMenuPage() {
   const [menu, setMenu] = useState<MenuItem[]>([]);
@@ -42,7 +44,7 @@ export default function OwnerMenuPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <main className="min-h-screen bg-linear-to-b from-white to-gray-50">
       <section className="max-w-6xl mx-auto px-6 py-12">
         {/* Header with Add Button */}
         <div className="flex items-center justify-between mb-8">
@@ -55,7 +57,7 @@ export default function OwnerMenuPage() {
             </p>
           </div>
           <button
-            className="bg-gradient-to-r from-amber-600 to-amber-800 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90 transition"
+            className="bg-linear-to-r from-amber-600 to-amber-800 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90 transition"
           >
             + Add New Item
           </button>
@@ -67,7 +69,7 @@ export default function OwnerMenuPage() {
 
         {/* Menu Grid */}
         {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {menu.map((item) => (
               <div
                 key={item.id}
@@ -81,7 +83,7 @@ export default function OwnerMenuPage() {
 
                 {/* Owner Controls */}
                 <div className="flex gap-2 mt-4">
-                  <button className="bg-gradient-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
+                  <button className="bg-linear-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
                     Edit
                   </button>
                   <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
@@ -92,6 +94,22 @@ export default function OwnerMenuPage() {
             ))}
           </div>
         )}
+
+       
+        {/* ✅ Generate QR Button */}
+        <div className="flex justify-center mt-8">
+        <Link
+            href="/owner/menuQR"
+            className={`px-8 py-4 rounded-full shadow-lg transition ${
+            menu.length > 0
+                ? "bg-linear-to-r from-amber-600 to-amber-800 text-white hover:opacity-90"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            }`}
+        >
+            Generate QR for the Menu
+        </Link>
+        </div>
+
       </section>
     </main>
   );

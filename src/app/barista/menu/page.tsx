@@ -42,7 +42,7 @@ export default function OwnerMenuPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <main className="min-h-screen bg-linear-to-b from-white to-gray-50">
       <section className="max-w-6xl mx-auto px-6 py-12">
         {/* Header with Add Button */}
         <div className="flex items-center justify-between mb-8">
@@ -55,7 +55,7 @@ export default function OwnerMenuPage() {
             </p>
           </div>
           <button
-            className="bg-gradient-to-r from-amber-600 to-amber-800 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90 transition"
+            className="bg-linear-to-r from-amber-600 to-amber-800 text-white px-6 py-3 rounded-full shadow-lg hover:opacity-90 transition"
           >
             + Add New Item
           </button>
@@ -81,7 +81,7 @@ export default function OwnerMenuPage() {
 
                 {/* Owner Controls */}
                 <div className="flex gap-2 mt-4">
-                  <button className="bg-gradient-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
+                  <button className="bg-linear-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
                     Edit
                   </button>
                   <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:opacity-90 transition">
